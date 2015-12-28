@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "name": "Butterfly in China",
+  "description": "Monitors weather forecasts and air conditions in places I go for work.",
+  "source_url": false,
+  "guid": "09ad0200d9e8c10f5ed8406ad9697640",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "exported_at": "2015-12-28T07:37:30Z",
+  "agents": [
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Hazardous AQI day?",
+      "disabled": false,
+      "guid": "0db2a954f6a97eef625059cb868890ec",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "151",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "200",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is hazardous today.  Have your inhaler on you.  Maybe you should stay home?"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Dangerous AQI day?",
+      "disabled": false,
+      "guid": "1a103e526768d84435e44404d00d30fa",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "201",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is dangerous today.  Stay home, maybe wear a gas mask.  Don't bother going out."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Unhealthy AQI day?",
+      "disabled": false,
+      "guid": "1b55eb20053b21f057c6518f32ce6a05",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "101",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "150",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is unhealthy today, be extremely careful and have your inhaler on you."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Moderate AQI day? (2)",
+      "disabled": false,
+      "guid": "2370497617b25db40142dedab3d6eb2a",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "50",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "100",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is moderate today, be careful."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WeatherAgent",
+      "name": "Butterfly in China - Get Weather Forecast for Oakland, CA",
+      "disabled": false,
+      "guid": "2a9dba599df7feab63e81e6bb38edb49",
+      "options": {
+        "service": "wunderground",
+        "api_key": "{% credential weather_underground_api_key %}",
+        "location": "94607",
+        "which_day": "0",
+        "expected_update_period_in_days": "2"
+      },
+      "schedule": "6am",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Butterfly in China - Build today's weather report for Oakland, CA",
+      "disabled": false,
+      "guid": "2d346b2aca03682e033e37649b305add",
+      "options": {
+        "instructions": {
+          "message": "Today's weather forecast for {{ location }} is {{ conditions }}, with a high of {{ high.fahrenheit }} degrees Fahrenheit and a low of {{ low.fahrenheit }} degrees Fahrenheit.  The average humidity for today will be {{ avehumidity }}%."
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailDigestAgent",
+      "name": "Butterfly in China - E-mail Vegas weather report",
+      "disabled": false,
+      "guid": "52f65edf0793d31c4fd6d71ffb38bfd8",
+      "options": {
+        "subject": "Today's DefCon weather report.",
+        "headline": "Here is your Las Vegas, NV weather report for today:",
+        "expected_receive_period_in_days": "2"
+      },
+      "schedule": "8am",
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Hazardous AQI day? (2)",
+      "disabled": false,
+      "guid": "56b7a076842a80bca179a978ef138879",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "151",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "200",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is hazardous today.  Have your inhaler on you.  Maybe you should stay home?"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WeatherAgent",
+      "name": "Butterfly in China - Get Weather Forecast for Washington, DC",
+      "disabled": true,
+      "guid": "677832580e687b4d027c2b7630b60619",
+      "options": {
+        "service": "wunderground",
+        "api_key": "{% credential weather_underground_api_key %}",
+        "location": "20037",
+        "which_day": "0",
+        "expected_update_period_in_days": "2"
+      },
+      "schedule": "3am",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::EmailDigestAgent",
+      "name": "Butterfly in China - E-mail weather report",
+      "disabled": false,
+      "guid": "77e2cf709a6c4a984f3f9e91294a1432",
+      "options": {
+        "subject": "Today's weather report.",
+        "headline": "Here is your weather report for today:",
+        "expected_receive_period_in_days": "2"
+      },
+      "schedule": "7am",
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Unhealthy AQI day? (2)",
+      "disabled": false,
+      "guid": "8455f4b1c1cd5d459a9697c267c44e6c",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "101",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "150",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is unhealthy today, be extremely careful and have your inhaler on you."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Butterfly in China - Build today's AQI report for Oakland, CA",
+      "disabled": false,
+      "guid": "8d4f58dc24b36f927527113f56ce19f2",
+      "options": {
+        "instructions": {
+          "message": "{{ message }}"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WeatherAgent",
+      "name": "Butterfly in China - Get Weather Forecast for Las Vegas, NV",
+      "disabled": true,
+      "guid": "a62f4dde22f15723de053c7e9dbba7b6",
+      "options": {
+        "service": "wunderground",
+        "api_key": "{% credential weather_underground_api_key %}",
+        "location": "89109",
+        "which_day": "0",
+        "expected_update_period_in_days": "2"
+      },
+      "schedule": "7am",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Butterfly in China - Pull the AQI forecast for San Jose, CA",
+      "disabled": true,
+      "guid": "c0da2ba6d06d4e5797365a9e61feefe4",
+      "options": {
+        "expected_update_period_in_days": "7",
+        "url": "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&zipCode=95119&distance=25&API_KEY={% credential airnow_api_key %}",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "aqi": {
+            "path": "$.[0].AQI"
+          },
+          "summary": {
+            "path": "$.[0].Category.Name"
+          }
+        }
+      },
+      "schedule": "6am",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Butterfly in China - Build today's AQI report for San Jose, CA",
+      "disabled": false,
+      "guid": "c2c7852ff6b32adaf71234d784a13769",
+      "options": {
+        "instructions": {
+          "message": "{{ message }}"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailDigestAgent",
+      "name": "Butterfly in China - E-mail DC weather report",
+      "disabled": false,
+      "guid": "c454f4f908c190af716b7dd4f90c3663",
+      "options": {
+        "subject": "Today's DC weather report.",
+        "headline": "Here is your Washington, DC weather report for today:",
+        "expected_receive_period_in_days": "2"
+      },
+      "schedule": "4am",
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Butterfly in China - Pull the AQI forecast for Oakland, CA",
+      "disabled": false,
+      "guid": "cec988a8dc4ca545b320029331a6e1b4",
+      "options": {
+        "expected_update_period_in_days": "7",
+        "url": "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&zipCode=94607&distance=25&API_KEY={% credential airnow_api_key %}",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "aqi": {
+            "path": "$.[0].AQI"
+          },
+          "summary": {
+            "path": "$.[0].Category.Name"
+          }
+        }
+      },
+      "schedule": "6am",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Moderate AQI day?",
+      "disabled": false,
+      "guid": "db11c047567d385d034d73d1294a0a93",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "50",
+            "path": "aqi"
+          },
+          {
+            "type": "field<=value",
+            "value": "100",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is moderate today, be careful."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Butterfly in China - Build today's weather report for Las Vegas, NV",
+      "disabled": false,
+      "guid": "e4fe4b4614810f5bda34e43cb8d8a595",
+      "options": {
+        "instructions": {
+          "message": "Today's weather forecast for {{ location }} is {{ conditions }}, with a high of {{ high.fahrenheit }} degrees Fahrenheit and a low of {{ low.fahrenheit }} degrees Fahrenheit.  The average humidity for today will be {{ avehumidity }}%."
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Butterfly In China - Dangerous AQI day? (2)",
+      "disabled": false,
+      "guid": "e7b49c848cd1cc14f177c1fe4fa7c0ed",
+      "options": {
+        "expected_receive_period_in_days": "7",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "field>value",
+            "value": "201",
+            "path": "aqi"
+          }
+        ],
+        "message": "Today's Air Quality forecast is {{ summary }} (actual AQI value: {{ aqi }}).  The AQI is dangerous today.  Stay home, maybe wear a gas mask.  Don't bother going out."
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Butterfly in China - Build today's weather report for Washington, DC",
+      "disabled": false,
+      "guid": "f4c0314fc14540eadf56b4e1cb5a59a7",
+      "options": {
+        "instructions": {
+          "message": "Today's weather forecast for {{ location }} is {{ conditions }}, with a high of {{ high.fahrenheit }} degrees Fahrenheit and a low of {{ low.fahrenheit }} degrees Fahrenheit.  The average humidity for today will be {{ avehumidity }}%."
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 11
+    },
+    {
+      "source": 1,
+      "receiver": 11
+    },
+    {
+      "source": 2,
+      "receiver": 11
+    },
+    {
+      "source": 3,
+      "receiver": 14
+    },
+    {
+      "source": 4,
+      "receiver": 5
+    },
+    {
+      "source": 5,
+      "receiver": 9
+    },
+    {
+      "source": 7,
+      "receiver": 14
+    },
+    {
+      "source": 8,
+      "receiver": 20
+    },
+    {
+      "source": 10,
+      "receiver": 14
+    },
+    {
+      "source": 11,
+      "receiver": 9
+    },
+    {
+      "source": 12,
+      "receiver": 18
+    },
+    {
+      "source": 13,
+      "receiver": 3
+    },
+    {
+      "source": 13,
+      "receiver": 10
+    },
+    {
+      "source": 13,
+      "receiver": 7
+    },
+    {
+      "source": 13,
+      "receiver": 19
+    },
+    {
+      "source": 16,
+      "receiver": 17
+    },
+    {
+      "source": 16,
+      "receiver": 2
+    },
+    {
+      "source": 16,
+      "receiver": 0
+    },
+    {
+      "source": 16,
+      "receiver": 1
+    },
+    {
+      "source": 17,
+      "receiver": 11
+    },
+    {
+      "source": 18,
+      "receiver": 6
+    },
+    {
+      "source": 19,
+      "receiver": 14
+    },
+    {
+      "source": 20,
+      "receiver": 15
+    }
+  ],
+  "control_links": [
+
+  ]
+}
