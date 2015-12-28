@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "name": "Shake, Rattle, and Roll",
+  "description": "Agent network that monitors the USGS' Earthquake Hazards API server (http://earthquake.usgs.gov/earthquakes/feed/v1.0/) for human-detectible earthquakes.",
+  "source_url": false,
+  "guid": "4888e9b976e2b45919289bf62a5fb818",
+  "tag_fg_color": null,
+  "tag_bg_color": null,
+  "exported_at": "2015-12-28T07:30:21Z",
+  "agents": [
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Shake, Rattle, and Roll - Pittsburgh, PA",
+      "disabled": false,
+      "guid": "2d66d26d2d0b6b6406deace2ae85b82e",
+      "options": {
+        "expected_update_period_in_days": "3650",
+        "url": "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=40.4313684&longitude=-79.9805005&maxradiuskm=25&limit=1&format=geojson&eventtype=earthquake&minmagnitude=4.0",
+        "type": "json",
+        "mode": "on_change",
+        "user_agent": "Exocortex v0.1.0 Earthquake API Bot (details: https://github.com/cantino/huginn)",
+        "extract": {
+          "magnitude": {
+            "path": "features[*].properties.mag"
+          },
+          "location": {
+            "path": "features[*].properties.place"
+          },
+          "url": {
+            "path": "features[*].properties.url"
+          },
+          "latitude": {
+            "path": "features[*].geometry.coordinates.[0]"
+          },
+          "longitude": {
+            "path": "features[*].geometry.coordinates.[1]"
+          },
+          "depth": {
+            "path": "features[*].geometry.coordinates.[2]"
+          }
+        }
+      },
+      "schedule": "every_5m",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Shake, Rattle, and Roll - Washington, DC",
+      "disabled": false,
+      "guid": "426334cb1ef21b2ae8be5dfb30ccd988",
+      "options": {
+        "expected_update_period_in_days": "3650",
+        "url": "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=38.907192&longitude=-77.036871&maxradiuskm=75&limit=1&format=geojson&eventtype=earthquake&minmagnitude=4.0",
+        "type": "json",
+        "mode": "on_change",
+        "user_agent": "Exocortex v0.1.0 Earthquake API Bot (details: https://github.com/cantino/huginn)",
+        "extract": {
+          "magnitude": {
+            "path": "features[*].properties.mag"
+          },
+          "location": {
+            "path": "features[*].properties.place"
+          },
+          "url": {
+            "path": "features[*].properties.url"
+          },
+          "latitude": {
+            "path": "features[*].geometry.coordinates.[0]"
+          },
+          "longitude": {
+            "path": "features[*].geometry.coordinates.[1]"
+          },
+          "depth": {
+            "path": "features[*].geometry.coordinates.[2]"
+          }
+        }
+      },
+      "schedule": "every_5m",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Shake, Rattle, and Roll - Create XMPP-compatible messages out of USGS earthquake events",
+      "disabled": false,
+      "guid": "542894ccd4319aef19a3ffe1c6cb938e",
+      "options": {
+        "instructions": {
+          "created_at": "{{ created_at }}",
+          "message": "Incoming message from Shake, Rattle, and Roll - earthquake detected in {{ location }}!",
+          "earthquake": "Magnitude {{ magnitude }} seismic event at latitude {{ latitude }}, longitude {{ longitude }}, depth {{ depth }} km.  The event has a page on the USGS Earthquake Hazards page here: {{ url }}"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 1209600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::BeeperAgent",
+      "name": "Shake, Rattle, and Roll - Send earthquake alerts through beeper.io",
+      "disabled": false,
+      "guid": "a07c9e7d99013a6dfef187159223cdd0",
+      "options": {
+        "type": "message",
+        "app_id": "{% credential beeper_app_id %}",
+        "api_key": "{% credential beeper_api_key %}",
+        "sender_id": "565277853134610001c20400",
+        "phone": "{% credential beeper_phone_number %}",
+        "text": "{{ message }} -- {{ earthquake }}"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Shake, Rattle, and Roll - Contact everybody!",
+      "disabled": false,
+      "guid": "afa6593af0e9e798e2e7826b4dde2825",
+      "options": {
+        "subject": "Seismic event detected!",
+        "expected_receive_period_in_days": "3650",
+        "recipients": [
+          "somebody@example.com",
+          "somebody_else@example.com",
+          "another_person@example.com"
+        ]
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::JabberAgent",
+      "name": "Shake, Rattle, and Roll - Send an XMPP message",
+      "disabled": false,
+      "guid": "d774fa151ad08f374702b65260de7df3",
+      "options": {
+        "jabber_server": "{% credential primary_xmpp_server %}",
+        "jabber_port": "5222",
+        "jabber_sender": "{% credential srr_xmpp_username %}",
+        "jabber_receiver": "{% credential primary_xmpp_destination %}",
+        "jabber_password": "{% credential srr_xmpp_password %}",
+        "message": "{{ message }} -- {{ earthquake }}",
+        "connect_to_receiver_radio": "true",
+        "connect_to_receiver": "true",
+        "expected_receive_period_in_days": "3650"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::ManualEventAgent",
+      "name": "Shake, Rattle, and Roll - Inject test events",
+      "disabled": false,
+      "guid": "ea25dee8aea6592f17efe8a4e4ed1e1e",
+      "options": {
+        "no options": "are needed"
+      },
+      "keep_events_for": 3600
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Shake, Rattle, and Roll - Oakland, CA",
+      "disabled": false,
+      "guid": "eb1e2b2a2ebc8ab946a16ef8b0207c6f",
+      "options": {
+        "expected_update_period_in_days": "3650",
+        "url": "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=37.804358908571395&longitude=-122.27096557617188&maxradiuskm=75&limit=1&eventtype=earthquake&minmagnitude=4.0",
+        "type": "json",
+        "mode": "on_change",
+        "user_agent": "Exocortex v0.1.0 Earthquake API Bot (details: https://github.com/cantino/huginn)",
+        "extract": {
+          "magnitude": {
+            "path": "features[*].properties.mag"
+          },
+          "location": {
+            "path": "features[*].properties.place"
+          },
+          "url": {
+            "path": "features[*].properties.url"
+          },
+          "latitude": {
+            "path": "features[*].geometry.coordinates.[0]"
+          },
+          "longitude": {
+            "path": "features[*].geometry.coordinates.[1]"
+          },
+          "depth": {
+            "path": "features[*].geometry.coordinates.[2]"
+          }
+        }
+      },
+      "schedule": "every_5m",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 2
+    },
+    {
+      "source": 1,
+      "receiver": 2
+    },
+    {
+      "source": 2,
+      "receiver": 5
+    },
+    {
+      "source": 2,
+      "receiver": 4
+    },
+    {
+      "source": 2,
+      "receiver": 3
+    },
+    {
+      "source": 6,
+      "receiver": 3
+    },
+    {
+      "source": 7,
+      "receiver": 2
+    }
+  ],
+  "control_links": [
+
+  ]
+}
