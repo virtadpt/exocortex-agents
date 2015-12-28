@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "name": "Tripwire",
+  "description": "Monitors law enforcement agencies for abrupt changes of state or interesting developments.",
+  "source_url": false,
+  "guid": "038c7a798a8b604709fa6eb9ccbddec6",
+  "tag_fg_color": "#e2ec4d",
+  "tag_bg_color": "#50818f",
+  "exported_at": "2015-12-28T07:46:37Z",
+  "agents": [
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Tripwire - Deduplicate FBI Most Wanted alerts",
+      "disabled": false,
+      "guid": "0d57ee14acc0a7e76283a88c364e8477",
+      "options": {
+        "property": "{{ message }}",
+        "lookback": "10",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Tripwire - Monitor the FBI's Ten Most Wanted List",
+      "disabled": false,
+      "guid": "13d9f0ece353e41cddf66dcad9047628",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "http://www.fbi.gov/wanted/topten/RSS"
+      },
+      "schedule": "8am",
+      "keep_events_for": 1209600
+    },
+    {
+      "type": "Agents::ChangeDetectorAgent",
+      "name": "Tripwire - Detect new case studies in the FBI's Foreign Counterintelligence archive",
+      "disabled": false,
+      "guid": "1ed52b6cd6890b364e5ee930ecf39cf6",
+      "options": {
+        "property": "{{ last_updated }}",
+        "expected_update_period_in_days": 365
+      },
+      "keep_events_for": 1209600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Tripwire - Deduplicate FBI Most Wanted Terrorist alerts",
+      "disabled": false,
+      "guid": "2477c84a848c2b98d3ecf1f512ccb9ca",
+      "options": {
+        "property": "{{ message }}",
+        "lookback": "10",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Tripwire - Write the Ten Most Wanted List update message",
+      "disabled": false,
+      "guid": "278e9e206e6b8456ffa3899c7da10ee8",
+      "options": {
+        "instructions": {
+          "message": "This is Tripwire!  The FBI's Ten Most Wanted List changed on {{ last_updated }}!  The link to the new Ten Most Wanted page is: http://www.fbi.gov/wanted/topten"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Tripwire - Write the Most Wanted Terrorists List update message",
+      "disabled": false,
+      "guid": "2cd71461ed4652682870b4452bdfff24",
+      "options": {
+        "instructions": {
+          "message": "This is Tripwire!  The FBI's Most Wanted Terrorists List changed on {{ last_updated }}!  The link to the new Ten Most Wanted page is: http://www.fbi.gov/wanted/wanted_terrorists"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Tripwire - Deduplicate DPL notices",
+      "disabled": false,
+      "guid": "33be1d7d4b2ab4e62ca433013c82c56e",
+      "options": {
+        "property": "{{ message }}",
+        "lookback": "10",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Tripwire - Write the Cyber Most Wanted List update message",
+      "disabled": false,
+      "guid": "3f9ab9fec2eed65885b2a2c0d2d467ce",
+      "options": {
+        "instructions": {
+          "message": "This is Tripwire!  The FBI's Cyber Most Wanted (ugh!) List changed on {{ last_updated }}!  The link to the new Ten Most Wanted page is: http://www.fbi.gov/wanted/cyber"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Tripwire - Pull the Recent Changes to the Denied Persons List page",
+      "disabled": false,
+      "guid": "40987a4a0287124d659b4a5164cfa1e2",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "https://www.bis.doc.gov/dpl/public/recent_changes.php",
+        "type": "html",
+        "mode": "on_change",
+        "extract": {
+          "last_modified": {
+            "css": "h4",
+            "value": ".//text()"
+          }
+        }
+      },
+      "schedule": "every_12h",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Tripwire - E-mail me when the Foreign Counterintelligence Archive is updated",
+      "disabled": false,
+      "guid": "578e1ba79f5b490d41f9d67fd57f4f0a",
+      "options": {
+        "subject": "Tripwire here.  The Foreign Counterintelligence Archive's contents have changed.",
+        "body": "{{ message }}",
+        "expected_receive_period_in_days": "365"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::ChangeDetectorAgent",
+      "name": "Tripwire - Detect changes to the Denied Persons List Recent Changes page",
+      "disabled": false,
+      "guid": "60603a625192c673ffecad92c19488b9",
+      "options": {
+        "property": "{{ last_modified }}",
+        "expected_update_period_in_days": 365
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::ChangeDetectorAgent",
+      "name": "Tripwire - Detect changes in the FBI's Cyber Most Wanted List",
+      "disabled": false,
+      "guid": "7e01c471b5a815eeab9a223d1a851903",
+      "options": {
+        "property": "{{ last_updated }}",
+        "expected_update_period_in_days": 365
+      },
+      "keep_events_for": 1209600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Tripwire - E-mail me when the DPL changes",
+      "disabled": false,
+      "guid": "82da570c2e37a955b8ade9253158ccaf",
+      "options": {
+        "subject": "Tripwire here.  The Denied Persons List changed.",
+        "body": "{{ message }}",
+        "expected_receive_period_in_days": "365"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::ChangeDetectorAgent",
+      "name": "Tripwire - Detect changes in the FBI's Ten Most Wanted List",
+      "disabled": false,
+      "guid": "864920893baa79684cb032381897c03c",
+      "options": {
+        "property": "{{ last_updated }}",
+        "expected_update_period_in_days": 365
+      },
+      "keep_events_for": 1209600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Tripwire - Write the DPL change notice",
+      "disabled": false,   
+      "guid": "8a1242ecb100aaa03578ef6acc704f2b",
+      "options": {
+        "instructions": {
+          "message": "The US Department of Commerce's Denied Persons List was updated on {{ last_modified | replace:'Last Modified: ','' }}.  If you have time, you'll want to look it over here: https://www.bis.doc.gov/dpl/public/recent_changes.php"
+        },
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Tripwire - Deduplicate FBI Cyber Most Wanted alerts",
+      "disabled": false,
+      "guid": "9785f1901f09192409adaaaece9562a4",
+      "options": {
+        "property": "{{ message }}",
+        "lookback": "10",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Tripwire - Pull the FBI's Foreign Counterintelligence Archive RSS feed",
+      "disabled": false,
+      "guid": "979dd4de3fbf8195461ddf325f425b0b",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://vault.fbi.gov/foreign-counterintelligence/RSS"
+      },
+      "schedule": "8am",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::ChangeDetectorAgent",
+      "name": "Tripwire - Detect changes in the FBI's Most Wanted Terrorists List",
+      "disabled": false,
+      "guid": "ab9b3196a8de4877aac984de43f2d236",
+      "options": {
+        "property": "{{ last_updated }}",
+        "expected_update_period_in_days": 365
+      },
+      "keep_events_for": 1209600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Tripwire - E-mail me when an FBI Wanted List changes",
+      "disabled": false,
+      "guid": "c04d03a638294b73d7021d502b8af101",
+      "options": {
+        "subject": "One of the FBI's Wanted Lists has changed!",
+        "expected_receive_period_in_days": "365"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Tripwire - Build the Counterintelligence Archive update message",
+      "disabled": false,
+      "guid": "f22e35417ef4e7d45594fbd890c860a1",
+      "options": {
+        "instructions": {
+          "message": "This is Tripwire!  The FBI's Foreign Counterinteligence Archive was updated on {{ last_updated }}!  The link to the Archive is: https://vault.fbi.gov/foreign-counterintelligence"
+        },
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Tripwire - Monitor the FBI's Cyber Most Wanted List",
+      "disabled": false,
+      "guid": "f284447d21c6144de2c93b481cfd8202",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "http://www.fbi.gov/wanted/cyber/RSS"
+      },
+      "schedule": "8am",
+      "keep_events_for": 1209600
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Tripwire - Monitor the FBI's Most Wanted Terrorists List",
+      "disabled": false,
+      "guid": "f5bc3ac7f9247738afc7b8c2f591bf9f",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "http://www.fbi.gov/wanted/wanted_terrorists/RSS"
+      },
+      "schedule": "8am",
+      "keep_events_for": 1209600
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 18
+    },
+    {
+      "source": 1,
+      "receiver": 13
+    },
+    {
+      "source": 2,
+      "receiver": 19
+    },
+    {
+      "source": 3,
+      "receiver": 18
+    },
+    {
+      "source": 4,
+      "receiver": 0
+    },
+    {
+      "source": 5,
+      "receiver": 3
+    },
+    {
+      "source": 6,
+      "receiver": 12
+    },
+    {
+      "source": 7,
+      "receiver": 15
+    },
+    {
+      "source": 8,
+      "receiver": 10
+    },
+    {
+      "source": 10,
+      "receiver": 14
+    },
+    {
+      "source": 11,
+      "receiver": 7
+    },
+    {
+      "source": 13,
+      "receiver": 4
+    },
+    {
+      "source": 14,
+      "receiver": 6
+    },
+    {
+      "source": 15,
+      "receiver": 18
+    },
+    {
+      "source": 16,
+      "receiver": 2
+    },
+    {
+      "source": 17,
+      "receiver": 5
+    },
+    {
+      "source": 19,
+      "receiver": 9
+    },
+    {
+      "source": 20,
+      "receiver": 11
+    },
+    {
+      "source": 21,
+      "receiver": 17
+    }
+  ],
+  "control_links": [
+
+  ]
+}
