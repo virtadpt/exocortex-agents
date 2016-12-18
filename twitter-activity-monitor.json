@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "name": "Twitter Activity Monitor",
+  "description": "A simple example agent network that demonstrates how to monitor the entirety of Twitter and look for specific things you're interested in.",
+  "source_url": false,
+  "guid": "1813cce056659521db4c953760c06379",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "bullhorn",
+  "exported_at": "2016-12-18T22:11:52Z",
+  "agents": [
+    {
+      "type": "Agents::EmailDigestAgent",
+      "name": "Send and e-mail digest of what is strained from Twitter",
+      "disabled": false,
+      "guid": "9d5aa2020c470326c28238382164864f",
+      "options": {
+        "subject": "Lifeline: Twitter intelligence dump",
+        "headline": "The following tweets of interest have come up on Twitter:",
+        "expected_receive_period_in_days": "1"
+      },
+      "schedule": "every_1h",
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Deduplicate tweets from the stream",
+      "disabled": false,
+      "guid": "a8efa686ee3001c335d8a4d5aa68cb17",
+      "options": {
+        "property": "{{ text }}",
+        "lookback": "250",
+        "expected_update_period_in_days": "1"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TwitterStreamAgent",
+      "name": "Monitor Twitter for keywords",
+      "disabled": false,
+      "guid": "f1083229a93661b375df6369e419fdaa",
+      "options": {
+        "filters": [
+          "shooting",
+          "lottery fraud",
+          "random keyword",
+          "yet another random search term",
+          "have fun with this",
+          "you can find some interesting stuff",
+          "big brother",
+          "little sister",
+          "exocortex",
+          "datarefuge"
+        ],
+        "expected_update_period_in_days": "90",
+        "generate": "events"
+      },
+      "schedule": "every_1h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Extract only useful info from tweets for further processing",
+      "disabled": false,
+      "guid": "fcb5e1e6bd4b600c6663d6e8ae9808b7",
+      "options": {
+        "instructions": {
+          "created_at": "{{created_at}}",
+          "message": "{{user.screen_name}} - {{text}}"
+        },
+        "matchers": [
+
+        ],
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "receiver": 3
+    },
+    {
+      "source": 2,
+      "receiver": 1
+    },
+    {
+      "source": 3,
+      "receiver": 0
+    }
+  ],
+  "control_links": [
+
+  ]
+}
