@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "name": "Test Scenario",
+  "description": "No description provided",
+  "source_url": false,
+  "guid": "7e5b350d98fccb66eeecae6cbdebda95",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "gear",
+  "exported_at": "2017-01-16T05:46:27Z",
+  "agents": [
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Test Scenario - Hit JSON Placeholder",
+      "disabled": false,
+      "guid": "386a6c77598ea7362ba46432b441103c",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "type": "json",
+        "mode": "all",
+        "extract": {
+          "id": {
+            "path": "$.id"
+          },
+          "title": {
+            "path": "$.title"
+          }
+        }
+      },
+      "schedule": "every_30m",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Test Scenario - Send Email",
+      "disabled": false,
+      "guid": "e1423b479112a9fad665faddc2c079f5",
+      "options": {
+        "subject": "You have a notification!",
+        "headline": "Your notification:",
+        "expected_receive_period_in_days": "365",
+        "body": "Blog post {{ id }} has gone up with the title {{ title }}."
+      },
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 1
+    }
+  ],
+  "control_links": [
+
+  ]
+}
