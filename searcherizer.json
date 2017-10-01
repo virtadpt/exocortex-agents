@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "name": "Searcherizer",
+  "description": "This scenario does the same thing as Google Alerts: It runs periodic searches against a Searx (https://github.com/asciimoo/searx/) instance, compiles new results, and e-mails them to the default e-mail address of the Huginn account.",
+  "source_url": false,
+  "guid": "a3ec236ba5392f0a737b39b360d3f82f",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#2b1b93",
+  "icon": "eye",
+  "exported_at": "2017-10-01T01:17:41Z",
+  "agents": [
+    {
+      "type": "Agents::SentimentAgent",
+      "name": "Searcherizer - Run a sentiment analysis on each search hit",
+      "disabled": false,
+      "guid": "388fe26b6249dec1531fdac9da12f65d",
+      "options": {
+        "content": "$.content",
+        "expected_receive_period_in_days": 365
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Searcherizer - Search RSS: searx public instance",
+      "disabled": false,
+      "guid": "8e8f6378b0726938817e1985924a53e2",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://searx.me/?q=searx%20public%20instance&format=rss"
+      },
+      "schedule": "4am",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Searcherizer - Deduplicate search hits",
+      "disabled": false,
+      "guid": "9d73e1e3b07ae843c56d305d23700145",
+      "options": {
+        "property": "{{ $.original_event.url }}",
+        "lookback": "100",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Searcherizer - Build part of a search report",
+      "disabled": false,
+      "guid": "d41633d03f1b36a33121af5173e65baf",
+      "options": {
+        "instructions": {
+          "message": "{{ $.original_event.title }}<br />{{ $.original_event.url }}<br />Good/bad coefficient: {{ valence }}<br />Active/passive coefficient: {{ arousal }}<br />Strong/weak dominance ratio: {{ dominance }}<br />{{ content }}<br /><br />"
+        },
+        "mode": "clean"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailDigestAgent",
+      "name": "Searcherizer - Send a digest of search results",
+      "disabled": false,
+      "guid": "f225ba2a8c1f57897bc3a8dd74e7e0ef",
+      "options": {
+        "subject": "This is your daily web search report.",
+        "from": "searcherizer@your-huginn.example.com",
+        "expected_receive_period_in_days": "365",
+        "body": "message"
+      },
+      "schedule": "5am",
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 2
+    },
+    {
+      "source": 1,
+      "receiver": 0
+    },
+    {
+      "source": 2,
+      "receiver": 3
+    },
+    {
+      "source": 3,
+      "receiver": 4
+    }
+  ],
+  "control_links": [
+
+  ]
+}
