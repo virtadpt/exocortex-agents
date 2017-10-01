@@ -12,6 +12,9 @@ By default, Email Digest and Email Agents send messages to the default e-mail ad
 
 The sample scenarios are:
 * Butterfly In China - An agent network that polls the weather and air quality forecasts for cities I routinely travel to for work.  Please note that before this scenario will successfully import, you must have created a credential called ''weather_underground_api_key'' on the Credentials screen.
+* Searcherizer - A construct that mimics the functionality of Google Alerts using Searx and sentiment analysis.
 * Shake, Rattle, and Roll - A construct that polls the United States Geological Service's seismographic monitoring network for tectonic activity stronger than a 4.0 on the Richter scale every few minutes and e-mails alerts if a reasonably strong earthquake is detected.  A Manual Agent for testing beeper.io connectivity is included for no good reason.
+* Test Scenario - A construct that shows you how to program agents that interact with REST APIs.
 * Tripwire - A set of RSS Agents that check FBI Most Wanted Lists (and an Archive) for changes every morning.
+* Twitter Activity Monitor - A construct that demonstrates how to scan the Twitter Activity Stream for arbitrary keywords and build email reports from what it finds.
 
