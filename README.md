@@ -17,4 +17,5 @@ The sample scenarios are:
 * Test Scenario - A construct that shows you how to program agents that interact with REST APIs.
 * Tripwire - A set of RSS Agents that check FBI Most Wanted Lists (and an Archive) for changes every morning.
 * Twitter Activity Monitor - A construct that demonstrates how to scan the Twitter Activity Stream for arbitrary keywords and build email reports from what it finds.
+* Mastodon Integration Demo - A very small agent network that posts events to a [Mastodon](https://joinmastodon.org/) instance.
 

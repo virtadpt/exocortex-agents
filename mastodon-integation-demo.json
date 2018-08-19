@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "name": "Mastodon Integation Demo",
+  "description": "A small agent network that demonstrates how to interface Huginn with a Mastodon instance.",
+  "source_url": false,
+  "guid": "4af5327c83189f7665639e14966a43a8",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#444b5d",
+  "icon": "globe",
+  "exported_at": "2018-08-19T03:24:52Z",
+  "agents": [
+    {
+      "type": "Agents::PostAgent",
+      "name": "Send event to Mastodon",
+      "disabled": false,
+      "guid": "1dc3df8d1a54fa62ce7b8bc1151e6ad5",
+      "options": {
+        "post_url": "https://mastodon.social/api/v1/statuses",
+        "expected_receive_period_in_days": "365",
+        "content_type": "form",
+        "method": "post",
+        "payload": {
+          "status": "{{ message }}"
+        },
+        "headers": {
+          "Authorization": "Bearer {% credential mastodon_access_token %}"
+        },
+        "emit_events": "false",
+        "no_merge": "false"
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::ManualEventAgent",
+      "name": "Manually inject events into the Mastodon agent",
+      "disabled": false,
+      "guid": "a68ea24a3c514dcf2bf3b7ecde76a676",
+      "options": {
+        "message": "Hello, world!"
+      },
+      "keep_events_for": 3600
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Pull the RSS feed on the Doctor's blog",
+      "disabled": false,
+      "guid": "aa60dda6e8275442549329e164d10ec7",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://drwho.virtadpt.net/rss/feed.xml"
+      },
+      "schedule": "every_12h",
+      "keep_events_for": 604800
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "receiver": 0
+    },
+    {
+      "source": 2,
+      "receiver": 0
+    }
+  ],
+  "control_links": [
+
+  ]
+}
