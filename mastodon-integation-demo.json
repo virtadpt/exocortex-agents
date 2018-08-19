@@ -20,7 +20,7 @@
         "content_type": "form",
         "method": "post",
         "payload": {
-          "status": "{{ message }}"
+          "status": "{{ message }}{{ title }} {{ url }}"
         },
         "headers": {
           "Authorization": "Bearer {% credential mastodon_access_token %}"
