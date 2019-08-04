@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "name": "Demo Weather Forecaster",
+  "description": "This is a collection of agents that contact the US Weather Service and get the weather report for the current day and the next 24 hours every day.  It is a proof of concept.",
+  "source_url": false,
+  "guid": "58bc568c07c5a303d3c770856a47d9a4",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "gear",
+  "exported_at": "2019-08-04T01:35:31Z",
+  "agents": [
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Demo Weather Forecaster - Pull the NWS forecast for the requested location",
+      "disabled": false,
+      "guid": "430bbc26ee4d012fdc7c7a54bf6343a1",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "{{ url }}",
+        "type": "json",
+        "mode": "merge",
+        "extract": {
+          "today": {
+            "path": "$.properties.periods.[0].detailedForecast"
+          },
+          "tonight": {
+            "path": "$.properties.periods.[1].detailedForecast"
+          },
+          "datestamp": {
+            "path": "$.properties.updateTime"
+          }
+        },
+        "user_agent": "Exocortex v0.4.1 Weather Forecast Bot (contact: huginn-test-user at huginn dot example dot com)"
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Demo Weather Forecaster - Email me the weather report for Washington, DC",
+      "disabled": false,
+      "guid": "6170c14d6d3796fbc70d5bc1b7659abd",
+      "options": {
+        "subject": "Your daily weather forecast for Washington, DC",
+        "body": "{{ message }}",
+        "expected_receive_period_in_days": "7"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Demo Weather Forecaster - Build an NWS weather report to send back to the user",
+      "disabled": false,
+      "guid": "cc5a394c28aaf0d24c4940c47765e892",
+      "options": {
+        "instructions": {
+          "message": "As of {{ datestamp | date: '%A, %d %B %Y' }} at {{ datestamp | date: '%l:%M%p (%z)' | strip }}, the National Weather Service forecast for {{ location }} is: {{ today }}{% line_break %}Tonight's forecast is: {{ tonight }}"
+        },
+        "mode": "clean"
+      },
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Demo Weather Forecaster - Get the weather forecast URL for Washington, DC",
+      "disabled": false,
+      "guid": "f73e8cdff3f9ab1afdab172fb93849ea",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "https://api.weather.gov/points/38.904722,-77.016389",
+        "type": "json",
+        "mode": "merge",
+        "extract": {
+          "url": {
+            "path": "$.properties.forecast"
+          }
+        },
+        "user_agent": "Exocortex v0.4.1 Weather Forecast Bot (contact: huginn-test-user at huginn dot example dot com)"
+      },
+      "schedule": "6am",
+      "keep_events_for": 3600,
+      "propagate_immediately": true
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 2
+    },
+    {
+      "source": 2,
+      "receiver": 1
+    },
+    {
+      "source": 3,
+      "receiver": 0
+    }
+  ],
+  "control_links": [
+
+  ]
+}
