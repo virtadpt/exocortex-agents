@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "name": "Elephant",
+  "description": "A quick and dirty agent network for archiving one's toots from a Mastodon instance.\r\n\r\nNote that you MUST set \"ENABLE_INSECURE_AGENTS=true\" in your huginn/.env file!",
+  "source_url": false,
+  "guid": "1d2cc5383250c8aea17d71737d8c1db5",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#de685b",
+  "icon": "gears",
+  "exported_at": "2019-11-10T23:54:11Z",
+  "agents": [
+    {
+      "type": "Agents::RssAgent",
+      "name": "Elephant - Pull a Fediversian's RSS or ATOM feed",
+      "disabled": false,
+      "guid": "0cc15d603a33d06383d07e19fedf01b5",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://mastodon.social/@Gargron.rss"
+      },
+      "schedule": "every_1h",
+      "keep_events_for": 86400
+    },
+    {
+      "type": "Agents::LocalFileAgent",
+      "name": "Elephant - Write toots as JSON files into a directory",
+      "disabled": false,
+      "guid": "44c4e563b47b412eb46a7eb8febde7eb",
+      "options": {
+        "mode": "write",
+        "watch": "false",
+        "path": "/path/to/write/toots/to/{{ 'now' | date: '%s' }}.json",
+        "append_radio": "false",
+        "append": "false",
+        "data": "{{ toot | json }}"
+      },
+      "schedule": "never",
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EventFormattingAgent",
+      "name": "Elephant - Build a toot",
+      "disabled": false,
+      "guid": "fb78c5f6854bc6e339c9ee31e2a6c9c8",
+      "options": {
+        "instructions": {
+          "toot": {
+            "id": "{{ id }}",
+            "url": "{{ url }}",
+            "links": "{{ links }}",
+            "title": "{{ title }}",
+            "content": "{{ content }}",
+            "authors": "{{ authors }}",
+            "categories": "{{ categories }}",
+            "last_updated": "{{ last_updated }}"
+          }
+        },
+        "mode": "clean"
+      },
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 2
+    },
+    {
+      "source": 2,
+      "receiver": 1
+    }
+  ],
+  "control_links": [
+
+  ]
+}
