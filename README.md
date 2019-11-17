@@ -18,4 +18,5 @@ The sample scenarios are:
 * Tripwire - A set of RSS Agents that check FBI Most Wanted Lists (and an Archive) for changes every morning.
 * Twitter Activity Monitor - A construct that demonstrates how to scan the Twitter Activity Stream for arbitrary keywords and build email reports from what it finds.
 * Mastodon Integration Demo - A very small agent network that posts events to a [Mastodon](https://joinmastodon.org/) instance.
+* Elephant - A small agent network that backs up posts on the Fediverse into separate files on the host running Huginn.  Requires that insecure agents be enabled so it will have access to the file system.
 
