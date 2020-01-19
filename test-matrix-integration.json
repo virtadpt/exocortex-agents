@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "name": "Test Matrix Integration",
+  "description": "A proof of concept agent network for integrating Huginn with the Matrix network.",
+  "source_url": false,
+  "guid": "566e55dd57ec53917bcf5c9bb1ee0b5a",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "road",
+  "exported_at": "2020-01-19T23:31:43Z",
+  "agents": [
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Test Matrix Integration - Pull my last tracks played at libre.fm",
+      "disabled": false,
+      "guid": "0af536ec3b131bf1124df8e74bffc8ff",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "https://libre.fm/2.0/?method=user.getrecenttracks&user=virtadpt&page=1&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "artist": {
+            "path": "$['recenttracks']['track'][*]['artist']['#text']"
+          },
+          "track": {
+            "path": "$['recenttracks']['track'][*]['name']"
+          },
+          "album": {
+            "path": "$['recenttracks']['track'][*]['album']['#text']"
+          },
+          "url": {
+            "path": "$['recenttracks']['track'][*]['url']"
+          }
+        }
+      },
+      "schedule": "every_10m",
+      "keep_events_for": 21600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::PostAgent",
+      "name": "Test Matrix Integration - Post recently listened track from libre.fm to the #nowplaying Matrix channel",
+      "disabled": false,
+      "guid": "54a2f6b95c6bb2b6fdb3b1538cfadb3f",
+      "options": {
+        "post_url": "https://matrix.jackpoint.virtadpt.net/_matrix/client/r0/rooms/{% credential matrix_room_id %}/send/m.room.message?access_token={% credential matrix_access_token %}",
+        "expected_receive_period_in_days": "365",
+        "content_type": "json",
+        "method": "post",
+        "payload": {
+          "msgtype": "m.text",
+          "body": "Artist: {{ artist }}\nTrack: {{ track }}\nAlbum: {{ album }}\nURL: {{ url }}"
+        },
+        "emit_events": "false",
+        "no_merge": "false",
+        "output_mode": "clean"
+      },
+      "schedule": "never",
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 1
+    }
+  ],
+  "control_links": [
+
+  ]
+}
