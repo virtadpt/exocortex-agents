@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "name": "Searx Answering API Examples",
+  "description": "A group of agents that demonstrate how to interact with Searx's (https://github.com/asciimoo/searx) answering API (https://asciimoo.github.io/searx/user/search_syntax.html).  They assume that Searx is running on the same host as Huginn on the default port, i.e., http://localhost:8888/\r\n\r\nPlease note that I've used + signs instead of URL encoded spaces (%20) for readability's sake.",
+  "source_url": false,
+  "guid": "aa3286eff8fd3a548face660abe14737",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#1a6c84",
+  "icon": "gear",
+  "exported_at": "2020-03-08T21:54:39Z",
+  "agents": [
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get the average of the values in a list using Searx",
+      "disabled": false,
+      "guid": "00d7bfa579811d05a4d7209d28df7292",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=avg+5+10+15+17+23&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get a random UUID using Searx as JSON",
+      "disabled": false,
+      "guid": "60c5ff00ab9136dcd092104383ff3b4a",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=random+uuid&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get a random floating point number using Searx",
+      "disabled": false,
+      "guid": "8636001b3389f11fc497626ba97ec432",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=random+float&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get a random ASCII string using Searx",
+      "disabled": false,
+      "guid": "95f46510d5ceed37943d6493eca549ae",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=random+string&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get a random SHA-256 hash using Searx",
+      "disabled": false,
+      "guid": "9bcbdf598b2fddae79c1d6cc6cf547f2",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=random+sha256&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get the largest value from a list using Searx",
+      "disabled": false,
+      "guid": "a614429575a2d15c261420172b3b170f",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=max+5+10+15+17+23&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get the product of the values in a list using Searx",
+      "disabled": false,
+      "guid": "a8e48c74c8a667827aa67c64a097bb90",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=prod+5+10+15+17+23&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get a random integer using Searx as JSON",
+      "disabled": false,
+      "guid": "c4b8b62a8222da4e6f6eac8fdb248dad",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=random+int&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get the smallest value from a list using Searx",
+      "disabled": false,
+      "guid": "d6a4242a0d204c73cd389a9d02b30b8d",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=min+5+10+15+17+23&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Searx Answering API Examples - Get the sum of the values in a list using Searx",
+      "disabled": false,
+      "guid": "e7d830069eda106c8b2482256eed31a7",
+      "options": {
+        "expected_update_period_in_days": "1",
+        "url": "http://localhost:8888/?q=sum+5+10+15+17+23&format=json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "answer": {
+            "path": "$.answers"
+          }
+        }
+      },
+      "schedule": "never",
+      "keep_events_for": 3600,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+
+  ],
+  "control_links": [
+
+  ]
+}
