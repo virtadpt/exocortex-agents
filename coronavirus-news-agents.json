@@ -1,0 +1,791 @@
+{
+  "schema_version": 1,
+  "name": "Coronavirus News Agents",
+  "description": "A network of agents that monitors global news for covid-19 updates.",
+  "source_url": false,
+  "guid": "4c78ae4073cd12a0d02e759304df9600",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#000000",
+  "icon": "cloud",
+  "exported_at": "2020-03-14T21:33:57Z",
+  "agents": [
+    {
+      "type": "Agents::SentimentAgent",
+      "name": "Run a sentiment analysis",
+      "disabled": false,
+      "guid": "072ff71e89386476fbdd03280dc11c7d",
+      "options": {
+        "content": "$.message",
+        "expected_receive_period_in_days": "7"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "fhi.no RSS feed",
+      "disabled": false,
+      "guid": "1baa771fec55722608d43b487b21ad79",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.fhi.no/rss/nyheter/"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC expedited article publication RSS feed",
+      "disabled": false,
+      "guid": "23eb271d4fff4312129a3bb563cc6459",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://wwwnc.cdc.gov/eid/rss/expedited.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Filter STAT News articles",
+      "disabled": false,
+      "guid": "2596cb4324d6dc70b4a65fcdef7668ee",
+      "options": {
+        "expected_receive_period_in_days": "365",
+        "keep_event": "true",
+        "rules": [
+          {
+            "type": "regex",
+            "value": [
+              "Breaking News",
+              "Health",
+              "Infectious Disease"
+            ],
+            "path": "$.categories"
+          }
+        ]
+      },
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC 2019 Novel Coronavirus RSS Feed",
+      "disabled": false,
+      "guid": "2e853a61be252096858543827da4feab",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Folkhalsomyndigheten Public Health RSS feed",
+      "disabled": false,
+      "guid": "4813ca164d00842480210ab775aaca9c",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.folkhalsomyndigheten.se/nyheter-och-press/nyhetsarkiv/?topic=halsoskydd-och-miljohalsa&syndication=rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Email the public health news alerts",
+      "disabled": false,
+      "guid": "515bde50a5a3a8328d34d582e635c1b9",
+      "options": {
+        "subject": "I have a public health news alert for you.",
+        "body": "{{ message }}<br /><br />{{ content }}",
+        "expected_receive_period_in_days": "365"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::SchedulerAgent",
+      "name": "Run the coronavirus newsfeed checker",
+      "disabled": false,
+      "guid": "535e0c3367a5f5001486d1fc3b2f1df1",
+      "options": {
+        "action": "run",
+        "schedule": "21 */3 * * *"
+      }
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC morbidity and mortality report feed",
+      "disabled": false,
+      "guid": "571e8d3073f4659675293e2907f66ea8",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.cdc.gov/mmwr/rss/mmwr.xml"
+      },
+      "schedule": "every_1d",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Outbreak News Today RSS feed",
+      "disabled": false,
+      "guid": "5ea1cb7609b43db5725143eb34599818",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://outbreaknewstoday.com/feed/"
+      },
+      "schedule": "every_1d",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "El Mundo RSS feed",
+      "disabled": false,
+      "guid": "5f741ea80b9525044e3cf9b49cc39fb6",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://e00-elmundo.uecdn.es/rss/portada.xml"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Meneame RSS feed",
+      "disabled": false,
+      "guid": "62fbb7ca961fb037197b45a64f5117f6",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.meneame.net/rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "El Espanol RSS feed",
+      "disabled": false,
+      "guid": "6671f2627db64765d8f1a5c154924396",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.elespanol.com/rss/"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC ahead-of-print article RSS feed",
+      "disabled": false,
+      "guid": "79ab9763b083232b8e71014ee628d3c8",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://wwwnc.cdc.gov/eid/rss/ahead-of-print.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Pull Japan's covid-19 stats",
+      "disabled": false,
+      "guid": "7a70db0f170859693f42869c96fa43da",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "https://covid19japan.s3-ap-northeast-1.amazonaws.com/data.json",
+        "type": "json",
+        "mode": "on_change",
+        "extract": {
+          "updated": {
+            "path": "$.updated[0].lastupdated"
+          },
+          "confirmed": {
+            "path": "$['daily'][(@.length-1)]['confirmed']"
+          },
+          "critical": {
+            "path": "$['daily'][(@.length-1)]['critical']"
+          },
+          "deaths": {
+            "path": "$['daily'][(@.length-1)]['deceased']"
+          },
+          "recovered": {
+            "path": "$['daily'][(@.length-1)]['recovered']"
+          }
+        },
+        "user_agent": "{% credential user_agent %}"
+      },
+      "schedule": "every_1d",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Folkhalsomyndigheten Press Release RSS feed",
+      "disabled": false,
+      "guid": "8391f7761a1b6d00f74b41ff03c2b67a",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.folkhalsomyndigheten.se/nyheter-och-press/nyhetsarkiv/?topic=smittskydd-och-sjukdomar&syndication=rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Avian Influenza Newswire",
+      "disabled": false,
+      "guid": "9052c43407c13f5b28179f0ec5581177",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://www.who.int/feeds/entity/csr/disease/avian_influenza/en/rss.xml"
+      },
+      "schedule": "every_5h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Ebola Newswire",
+      "disabled": false,
+      "guid": "a2e0905755e4cca962b2415098e10bca",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://www.who.int/feeds/entity/csr/disease/ebola/rss/en/rss.xml"
+      },
+      "schedule": "every_5h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Public Health Emergencies Newswire",
+      "disabled": false,
+      "guid": "a3792f4adbc3645773b9d012a0dcb64f",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.who.int/feeds/entity/hac/en/rss.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "El pais RSS feed",
+      "disabled": false,
+      "guid": "a9feb4107e9d92ca6d480354d80d0aa8",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "NBC Bay Area coronavirus RSS feed",
+      "disabled": false,
+      "guid": "aaef7794c5043923b8a2442d2b6b9776",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.nbcbayarea.com/news/coronavirus/feed/"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC Outbreak News Feed",
+      "disabled": false,
+      "guid": "b62b1a1abb2d75593180079869f79bef",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://tools.cdc.gov/api/v2/resources/media/285676.rss"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Newswire",
+      "disabled": false,
+      "guid": "ba22e4c48c4fd77eb344fe9e9334004a",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://www.who.int/feeds/entity/mediacentre/news/en/rss.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::WebsiteAgent",
+      "name": "Scrape the CCAES in Spain for Covid-19 stats",
+      "disabled": false,
+      "guid": "bb1e75cc2a7a074a4b29cf8ecb5e76c3",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "url": "http://www.mscbs.gob.es/profesionales/saludPublica/ccayes/alertasActual/nCov-China/situacionActual.htm",
+        "type": "html",
+        "mode": "on_change",
+        "extract": {
+          "confirmed_cases_in_spain": {
+            "css": ".banner-verde",
+            "value": "string(.)"
+          },
+          "confirmed_cases_in_europe": {
+            "css": ".banner-rojo",
+            "value": "string(.)"
+          },
+          "confirmed_cases_in_world": {
+            "css": ".banner-cian",
+            "value": "string(.)"
+          }
+        },
+        "user_agent": "{% credential user_agent %}"
+      },
+      "schedule": "every_1d",
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Filter out low interest articles",
+      "disabled": false,
+      "guid": "bd44f062975236d58ed48906b749d183",
+      "options": {
+        "expected_receive_period_in_days": "365",
+        "keep_event": "true",
+        "rules": [
+          {
+            "type": "field>=value",
+            "value": "4.5",
+            "path": "$.valence"
+          },
+          {
+            "type": "field>=value",
+            "value": "4.5",
+            "path": "$.arousal"
+          },
+          {
+            "type": "field>=value",
+            "value": "4.5",
+            "path": "$.dominance"
+          }
+        ],
+        "message": "Good/bad valence: {{ valence | round: 2 }}<br />Active/passive arousal: {{ arousal | round: 2 }}<br />Coefficient of dominance: {{ dominance | round: 2 }}<br />"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Disease Outbreak Newswire",
+      "disabled": false,
+      "guid": "c687659f15ba1e0139222b1b2954f366",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://www.who.int/feeds/entity/csr/don/en/rss.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "BNO News RSS feed",
+      "disabled": false,
+      "guid": "cb10e8dbc37b4816fde7dca724346021",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://bnonews.com/index.php/feed/"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "RSS feed for r/CoronaviruaCA",
+      "disabled": false,
+      "guid": "d06c51728edfc83251ca096880d32ec0",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.reddit.com/r/CoronavirusCA/.rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::DeDuplicationAgent",
+      "name": "Deduplicate public health-related news articles",
+      "disabled": false,
+      "guid": "d2a82edca9853d39d37abe1fbe02075a",
+      "options": {
+        "property": "{{ message }}",
+        "lookback": "300",
+        "expected_update_period_in_days": "365"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "CDC influenza RSS feed",
+      "disabled": false,
+      "guid": "d2efdff9c579197dd362f2d7c8fd78b0",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://tools.cdc.gov/api/v2/resources/media/277692.rss"
+      },
+      "schedule": "every_12h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "STAT News",
+      "disabled": false,
+      "guid": "dcc9a9e0cf27033c35ed41dcc7cedcf9",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://www.statnews.com/feed/"
+      },
+      "schedule": "every_5h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Email covid-19 stats in Spain",
+      "disabled": false,
+      "guid": "e2d0b6d0deddce56d40600fbf32508da",
+      "options": {
+        "subject": "I have new covid-19 stats for you.",
+        "body": "As of {{ 'now' | date: '%H:%M %Y-%m-%d' }} there are {{ confirmed_cases_in_spain | replace: '\\n', ' ' | strip }}, {{ confirmed_cases_in_europe | replace: '\\n', ' ' | strip }}, and {{ confirmed_cases_in_world | replace: '\\n', ' ' | strip }}.",
+        "expected_receive_period_in_days": "365"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Libertad Digital RSS feed",
+      "disabled": false,
+      "guid": "e32c2ba63940316a1ca143a7855709c8",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://rss.libertaddigital.com/libertaddigital/portada"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "World Health Organization's Feature Article Newswire",
+      "disabled": false,
+      "guid": "f2ab8c4040df30d8c92f2a599ae89a98",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "http://www.who.int/feeds/features/en/rss.xml"
+      },
+      "schedule": "every_2h",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Scan local coronavirus news for specific locations",
+      "disabled": false,
+      "guid": "f31659207b3ac31093bbc17c389e90b6",
+      "options": {
+        "expected_receive_period_in_days": "365",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "regex",
+            "value": [
+              "san francisco",
+              "oakland",
+              "pittsburgh",
+              "seattle",
+              "washington dc",
+              "los angeles",
+              "new york city"
+            ],
+            "path": "$.content"
+          }
+        ],
+        "message": "NOTICE: {{ agent.name }} detected coronavirus news in a location you're interested in at {{ last_updated }}: {{ url }}<br/>{{ content }}"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "svd.se RSS feed",
+      "disabled": false,
+      "guid": "f45d262eb726da7e6e2efa437fff4344",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.svd.se/feed/articles.rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Folkhalsomyndigheten Public Health Stats RSS feed",
+      "disabled": false,
+      "guid": "f75357f6a78fd569a634b0031da316a2",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "true",
+        "url": "https://www.folkhalsomyndigheten.se/nyheter-och-press/nyhetsarkiv/?topic=statistik-och-undersokningar&syndication=rss"
+      },
+      "schedule": "never",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Scan WHO and CDC news feeds for specific keywords",
+      "disabled": false,
+      "guid": "f964478edb897a84637cb302a61cfbb9",
+      "options": {
+        "expected_receive_period_in_days": "365",
+        "keep_event": "false",
+        "rules": [
+          {
+            "type": "regex",
+            "value": [
+              "san francisco",
+              "oakland",
+              "district of columbia",
+              "washington, DC",
+              "pittsburgh",
+              "measles",
+              "coronavirus"
+            ],
+            "path": "$.content"
+          }
+        ],
+        "message": "NOTICE: {{ agent.name }} detected keyword '{{ value }}' in the following public health newsfeed article posted on {{ last_updated }}: {{ url }}<br/>{{ content }}"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 24
+    },
+    {
+      "source": 1,
+      "receiver": 34
+    },
+    {
+      "source": 2,
+      "receiver": 37
+    },
+    {
+      "source": 3,
+      "receiver": 37
+    },
+    {
+      "source": 4,
+      "receiver": 37
+    },
+    {
+      "source": 5,
+      "receiver": 34
+    },
+    {
+      "source": 8,
+      "receiver": 37
+    },
+    {
+      "source": 9,
+      "receiver": 37
+    },
+    {
+      "source": 10,
+      "receiver": 34
+    },
+    {
+      "source": 11,
+      "receiver": 34
+    },
+    {
+      "source": 12,
+      "receiver": 34
+    },
+    {
+      "source": 13,
+      "receiver": 37
+    },
+    {
+      "source": 14,
+      "receiver": 31
+    },
+    {
+      "source": 15,
+      "receiver": 34
+    },
+    {
+      "source": 16,
+      "receiver": 37
+    },
+    {
+      "source": 17,
+      "receiver": 37
+    },
+    {
+      "source": 18,
+      "receiver": 37
+    },
+    {
+      "source": 19,
+      "receiver": 34
+    },
+    {
+      "source": 20,
+      "receiver": 34
+    },
+    {
+      "source": 21,
+      "receiver": 37
+    },
+    {
+      "source": 22,
+      "receiver": 37
+    },
+    {
+      "source": 23,
+      "receiver": 31
+    },
+    {
+      "source": 24,
+      "receiver": 6
+    },
+    {
+      "source": 25,
+      "receiver": 37
+    },
+    {
+      "source": 26,
+      "receiver": 34
+    },
+    {
+      "source": 27,
+      "receiver": 34
+    },
+    {
+      "source": 28,
+      "receiver": 0
+    },
+    {
+      "source": 29,
+      "receiver": 37
+    },
+    {
+      "source": 30,
+      "receiver": 3
+    },
+    {
+      "source": 32,
+      "receiver": 34
+    },
+    {
+      "source": 33,
+      "receiver": 37
+    },
+    {
+      "source": 34,
+      "receiver": 28
+    },
+    {
+      "source": 35,
+      "receiver": 34
+    },
+    {
+      "source": 36,
+      "receiver": 34
+    },
+    {
+      "source": 37,
+      "receiver": 28
+    }
+  ],
+  "control_links": [
+    {
+      "controller": 7,
+      "control_target": 20
+    },
+    {
+      "controller": 7,
+      "control_target": 26
+    },
+    {
+      "controller": 7,
+      "control_target": 27
+    },
+    {
+      "controller": 7,
+      "control_target": 10
+    },
+    {
+      "controller": 7,
+      "control_target": 19
+    },
+    {
+      "controller": 7,
+      "control_target": 35
+    },
+    {
+      "controller": 7,
+      "control_target": 1
+    },
+    {
+      "controller": 7,
+      "control_target": 15
+    },
+    {
+      "controller": 7,
+      "control_target": 36
+    },
+    {
+      "controller": 7,
+      "control_target": 5
+    },
+    {
+      "controller": 7,
+      "control_target": 11
+    },
+    {
+      "controller": 7,
+      "control_target": 32
+    },
+    {
+      "controller": 7,
+      "control_target": 12
+    }
+  ]
+}
