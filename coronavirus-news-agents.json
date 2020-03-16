@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "Coronavirus News Agents",
-  "description": "A network of agents that monitors global news for covid-19 updates.",
+  "description": "A network of agents that monitors global news for covid-19 updates.  License: CC-BY-SA (v4)",
   "source_url": false,
   "guid": "4c78ae4073cd12a0d02e759304df9600",
   "tag_fg_color": "#ffffff",
