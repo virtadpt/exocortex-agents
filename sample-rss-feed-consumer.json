@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "name": "Sample RSS feed consumer",
+  "description": "This agent network demonstrates how to pull the RSS feed for a blog, analyze each post, and do different things with it.",
+  "source_url": false,
+  "guid": "07cacb2826e074d06347d504f8b1e3e3",
+  "tag_fg_color": "#ffffff",
+  "tag_bg_color": "#5bc0de",
+  "icon": "gear",
+  "exported_at": "2020-10-10T20:56:03Z",
+  "agents": [
+    {
+      "type": "Agents::TriggerAgent",
+      "name": "Trigger on the string 'cyber' in Gareth Branwyn's Adafruit posts",
+      "disabled": false,
+      "guid": "00133b9e91225b7f1fb3122d96c5013b",
+      "options": {
+        "expected_receive_period_in_days": "31",
+        "keep_event": "true",
+        "rules": [
+          {
+            "type": "regex",
+            "value": "cyber",
+            "path": "$.categories"
+          },
+          {
+            "type": "regex",
+            "value": "cyber",
+            "path": "$.title"
+          }
+        ],
+        "must_match": "1"
+      },
+      "keep_events_for": 604800,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::EmailAgent",
+      "name": "Email Gareth's new post at Adafruit",
+      "disabled": false,
+      "guid": "26351c0dcb6ad87da27901c8e57150fb",
+      "options": {
+        "subject": "Gareth Branwyn's latest cyberpunk retrospective post: {{ title }}",
+        "from": "huginn@huginn.example.com",
+        "to": "you@somewhere.example.com",
+        "expected_receive_period_in_days": "365",
+        "body": "{{ title }}<br />Date: {{ last_updated }}<br />{{ url }}<br />{{ content }}"
+      },
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::RssAgent",
+      "name": "Pull Gareth Branwyn's RSS feed at Adafruit",
+      "disabled": false,
+      "guid": "c85943656629bf793b297a627927d22b",
+      "options": {
+        "expected_update_period_in_days": "365",
+        "clean": "false",
+        "url": "https://blog.adafruit.com/author/gareth/feed/"
+      },
+      "schedule": "every_1d",
+      "keep_events_for": 604800
+    },
+    {
+      "type": "Agents::PostAgent",
+      "name": "Post Gareth's latest blog post to hackers.town",
+      "disabled": false,
+      "guid": "ceafba174beb747da866be20f725555f",
+      "options": {
+        "post_url": "https://hackers.town/api/v1/statuses",
+        "expected_receive_period_in_days": "365",
+        "content_type": "form",
+        "method": "post",
+        "payload": {
+          "status": "{{ title }} {{ url }} #cyberpunk"
+        },
+        "headers": {
+          "Authorization": "Bearer {% credential hackerstown_access_token %}"
+        },
+        "emit_events": "false",
+        "no_merge": "false"
+      },
+      "schedule": "never",
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    },
+    {
+      "type": "Agents::PostAgent",
+      "name": "Send the URL to the Wayback Machine for archival",
+      "disabled": false,
+      "guid": "fc415f6e274dbb242237d531f97a5ed0",
+      "options": {
+        "post_url": "https://web.archive.org/save+{{ url }}",
+        "expected_receive_period_in_days": "365",
+        "content_type": "form",
+        "method": "get",
+        "emit_events": "false",
+        "no_merge": "false"
+      },
+      "schedule": "never",
+      "keep_events_for": 86400,
+      "propagate_immediately": false
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "receiver": 4
+    },
+    {
+      "source": 0,
+      "receiver": 3
+    },
+    {
+      "source": 0,
+      "receiver": 1
+    },
+    {
+      "source": 2,
+      "receiver": 0
+    }
+  ],
+  "control_links": [
+
+  ]
+}

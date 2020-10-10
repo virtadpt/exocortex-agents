@@ -22,4 +22,5 @@ The sample scenarios are:
 * Test Matrix Integration - A proof-of-concept agent network for interfacing Huginn with a [Matrix](https://matrix.org/) server.
 * Searx Answering API Examples - A collection of agents that demonstrate how to interact with [Searx's](https://searx.me/) answerers using the JSON API.
 * Coronavirus News Agents - A fleet of agents that monitor global news and public health agencies for covid-19 updates.  Not comprehensive.  License: CC-BY-SA (v4)
+* sample-rss-feed-consumer.json - An agent network that pulls an RSS feed, does some basic analysis on it, and does a couple of different things with the output as a proof of concept for how you can dissect an RSS event and do different things with the fields.
 
